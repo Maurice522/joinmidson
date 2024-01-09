@@ -149,6 +149,21 @@ h2 {
     flex-direction: column;
     gap: 0.5rem;
   }
+
+  form {
+    width: 75%;
+    margin: auto;
+  }
+
+  img {
+    width: 80%;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .right-section {
+    margin: 3rem auto 1rem auto;
+  }
 }
 
 @media (min-width: 768px) {
