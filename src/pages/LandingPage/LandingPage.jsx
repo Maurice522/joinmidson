@@ -12,7 +12,7 @@ import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const LandingPage = () => {
-  const domain = `joinmidson.vercel.app`;
+  const domain = `https://joinmidson-ochre.vercel.app`;
   const [currentUser, setCurrentUser] = useState({
     id: "",
     name: "",
@@ -94,7 +94,9 @@ const LandingPage = () => {
       currentUser.name !== "" &&
       currentUser.email !== "" &&
       currentUser.phone !== "" &&
-      currentUser.address !== ""
+      currentUser.address !== "" &&
+      currentUser.gender !== "Gender" &&
+      currentUser.age !== ""
     ) {
       if (userId && userId !== "") {
         const docRef = doc(db, "users", userId);
