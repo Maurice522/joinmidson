@@ -1,0 +1,167 @@
+.landing-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  font-family: "Handlee";
+  height: 10rem;
+  border-radius: 0 0 0.5rem 0.5rem;
+  background-color: #36454f;
+  color: white;
+  width: 100%;
+  margin: 0 0 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer {
+  font-family: "Handlee";
+  height: 20rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+  background-color: #36454f;
+  color: white;
+  width: 100%;
+  margin: 2rem 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.info {
+  width: 50%;
+  height: fit-content;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.left-section,
+.right-section,
+.top-section,
+.bottom-section {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.top-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.left-section,
+.right-section {
+  width: 100%;
+}
+
+form > h3 {
+  text-align: center;
+  margin: auto;
+}
+
+.right-section {
+  margin: auto auto auto 0;
+}
+
+form {
+  border: 1px solid #36454f;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.label {
+  color: black;
+  margin: 0.5rem 0;
+}
+
+input,
+select {
+  width: 97%;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  outline: none;
+  padding: 0.5rem;
+  border: 1px solid gray;
+}
+
+.button {
+  background-color: white;
+  border: solid 1px orangered;
+  width: 100%;
+  color: orangered;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 500ms;
+}
+
+.button:hover {
+  color: white;
+  background-color: orangered;
+  border: solid 1px white;
+}
+
+.right-section {
+  width: 100%;
+  border: 5px;
+  border-color: #007bff;
+}
+
+img {
+  width: 100%;
+  border-radius: 0.5rem;
+}
+
+.bottom-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+  width: 90%;
+}
+
+.box {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: solid 1px #36454f;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .info {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .top-section {
+    flex-direction: row;
+  }
+
+  .left-section,
+  .right-section {
+    width: 40%;
+  }
+
+  .bottom-section {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
