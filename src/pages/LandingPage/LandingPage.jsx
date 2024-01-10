@@ -13,6 +13,34 @@ import toast from "react-hot-toast";
 
 const LandingPage = () => {
   const domain = `https://joinmidson-ochre.vercel.app`;
+  const [whatsAppNumber, setWhatsAppNumber] = useState("");
+
+  useEffect(() => {
+    const fetchMetaData = async () => {
+      try {
+        const metaDocRef = doc(db, "meta", "landingpage");
+        const metaDocSnapshot = await getDoc(metaDocRef);
+
+        if (metaDocSnapshot.exists()) {
+          const metaData = metaDocSnapshot.data();
+          const number = metaData.whatsAppNumber.substring(
+            1,
+            metaData.whatsAppNumber.length
+          );
+          setWhatsAppNumber(number);
+        }
+      } catch (error) {
+        console.error("Error fetching meta data:", error);
+      }
+    };
+
+    fetchMetaData();
+  }, []);
+
+  const whatsAppDomain = "https://api.whatsapp.com/send?phone=";
+
+  console.log(whatsAppNumber);
+
   const [currentUser, setCurrentUser] = useState({
     id: "",
     name: "",
@@ -26,12 +54,12 @@ const LandingPage = () => {
   const [CMSData, setCMSData] = useState({});
   const { userId, companyName } = useParams();
   const [referByUser, setReferByUser] = useState(null);
-  console.log(userId, companyName);
+
   useEffect(() => {
     const loadCMSData = async () => {
       const docRef = doc(db, "meta", "landingpage");
       const docSnap = await getDoc(docRef);
-      console.log(docSnap.data());
+
       setCMSData(docSnap.data());
     };
 
@@ -58,11 +86,10 @@ const LandingPage = () => {
 
       toast.success("user created!");
       setCurrentUser((prevData) => ({ ...prevData, id: currentUserID }));
-      console.log("User added with ID:", currentUserID);
+
       return currentUserID;
     } catch (error) {
       toast.error("couldn't create user!");
-      console.error("Error adding user:", error);
       return null;
     }
   };
@@ -76,19 +103,16 @@ const LandingPage = () => {
   };
 
   const updateUser = async (user) => {
-    console.log(user);
     try {
       const userDoc = doc(db, "users", userId);
       await updateDoc(userDoc, user);
       return true;
     } catch (error) {
-      console.error("Error updating user:", error);
       return false;
     }
   };
 
   const handleSubmit = async (e) => {
-    console.log("fired");
     e.preventDefault();
     if (
       currentUser.name !== "" &&
@@ -101,10 +125,10 @@ const LandingPage = () => {
       if (userId && userId !== "") {
         const docRef = doc(db, "users", userId);
         const docSnap = await getDoc(docRef);
+
         var tempData = docSnap.data();
         var tempReferByUser = { id: docSnap.id, ...tempData };
-        console.log(tempReferByUser);
-        console.log({ id: docSnap.id, ...tempData });
+
         setReferByUser({ id: docSnap.id, ...tempData });
         const referBy = {
           id: userId,
@@ -116,8 +140,9 @@ const LandingPage = () => {
           ...prevData,
           referBy: referBy,
         }));
-        console.log(referBy);
+
         const createdUserID = makeid();
+
         const newUser = {
           name: currentUser.name,
           email: currentUser.email,
@@ -129,8 +154,9 @@ const LandingPage = () => {
           createdAt: serverTimestamp(),
           referBy: referBy,
         };
-        console.log(newUser);
+
         createUser(createdUserID, newUser);
+
         if (createdUserID !== null) {
           var referToLink = "";
           if (companyName !== undefined) {
@@ -144,18 +170,57 @@ const LandingPage = () => {
             link: referToLink,
             company: companyName !== undefined ? companyName : "",
           };
+
           var temp;
-          console.log(tempReferByUser.referTo);
+
           if (tempReferByUser && tempReferByUser.referTo !== undefined) {
             temp = [...tempReferByUser.referTo, referTo];
           } else {
             temp = [referTo];
           }
+
           setReferByUser((prevData) => ({ ...prevData, referTo: temp }));
+
           tempReferByUser.referTo = temp;
+
           const updatedUser = updateUser(tempReferByUser);
+
           if (updatedUser) {
             toast.success("User created successfully!");
+            if (companyName === undefined) {
+              const text = `*Name:* ${currentUser.name}
+               *Email:* ${currentUser.email}
+               *Phone Number:* ${currentUser.phone}
+               *Age:* ${currentUser.age}
+               *Gender:* ${currentUser.gender}
+               *Address:* ${currentUser.address}
+               *Referred By:* ${referBy.name}
+              `;
+
+              const wlink =
+                whatsAppDomain +
+                encodeURIComponent(whatsAppNumber) +
+                "&text=" +
+                encodeURIComponent(text);
+
+              window.location.replace(wlink);
+            } else {
+              const text = `*Name:* ${currentUser.name}
+               *Email:* ${currentUser.email}
+               *Phone Number:* ${currentUser.phone}
+               *Age:* ${currentUser.age}
+               *Gender:* ${currentUser.gender}
+               *Address:* ${currentUser.address}
+               *Referred By:* ${referBy.name}
+               *Referred By (Company Name):* ${referBy.company}
+              `;
+              const wlink =
+                whatsAppDomain +
+                encodeURIComponent(whatsAppNumber) +
+                "&text=" +
+                encodeURIComponent(text);
+              window.location.replace(wlink);
+            }
           } else {
             toast.error("Some error occurred");
           }
@@ -173,8 +238,24 @@ const LandingPage = () => {
           createdAt: serverTimestamp(),
           referBy: currentUser.referBy,
         };
-        console.log(newUser);
+
         createUser(createdUserID, newUser);
+
+        const text = `*Name:* ${currentUser.name}
+         *Email:* ${currentUser.email}
+         *Phone Number:* ${currentUser.phone}
+         *Age:* ${currentUser.age}
+         *Gender:* ${currentUser.gender}
+         *Address:* ${currentUser.address}
+        `;
+
+        const wlink =
+          whatsAppDomain +
+          encodeURIComponent(whatsAppNumber) +
+          "&text=" +
+          encodeURIComponent(text);
+
+        window.location.replace(wlink);
       }
     } else {
       toast.error("All fields are mandatory");
