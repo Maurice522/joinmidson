@@ -52,6 +52,7 @@
 }
 
 form {
+  color: #09264a;
   border: 1px solid #36454f;
   display: flex;
   flex-direction: column;
@@ -132,6 +133,7 @@ img {
 }
 
 .box {
+  color: #09264a;
   padding: 1rem;
   border-radius: 0.5rem;
   border: solid 1px #36454f;
