@@ -39,8 +39,6 @@ const LandingPage = () => {
 
   const whatsAppDomain = "https://api.whatsapp.com/send?phone=";
 
-  console.log(whatsAppNumber);
-
   const [currentUser, setCurrentUser] = useState({
     id: "",
     name: "",
@@ -265,76 +263,87 @@ const LandingPage = () => {
   return (
     <div className={styles["landing-page"]}>
       <header className={styles["header"]}>
-        <h1>Join Midson</h1>
+        <img
+          className={styles["logo"]}
+          src="/midsonLogo.jpg"
+          alt="Midson Logo"
+        />
+        <img
+          className={styles["topimg"]}
+          src="/midsontopwobg.png"
+          alt="Midson"
+        />
       </header>
       <div className={styles["top-section"]}>
         <div className={styles["left-section"]}>
-          <form onSubmit={handleSubmit}>
-            <h3>Register!</h3>
-            <label className={styles["label"]}>Name: </label>
-            <input
-              value={currentUser.name}
-              type="text"
-              name="name"
-              onChange={handleChange}
-            />
-            <label className={styles["label"]}>Email:</label>
-            <input
-              value={currentUser.email}
-              type="email"
-              name="email"
-              onChange={handleChange}
-            />
-            <label className={styles["label"]}>Age:</label>
-            <input
-              value={currentUser.age}
-              type="text"
-              name="age"
-              onChange={handleChange}
-            />
-            <label className={styles["label"]}>Gender:</label>
-            <select
-              name="gender"
-              value={currentUser.gender}
-              onChange={handleChange}
-            >
-              <option>Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-            <label className={styles["label"]}>Address:</label>
-            <input
-              value={currentUser.address}
-              type="text"
-              name="address"
-              onChange={handleChange}
-            />
-            <label className={styles["label"]}>Phone Number:</label>
-            <input
-              value={currentUser.phone}
-              type="tel"
-              name="phone"
-              onChange={handleChange}
-            />
-            <button className={styles["button"]} type="submit">
-              Submit
-            </button>
-          </form>
+          <div className={styles.box}>
+            <h3>{CMSData?.section1?.heading}</h3>
+            <p>{CMSData?.section1?.content}</p>
+          </div>
+          <div className={styles.box}>
+            <h3>{CMSData?.section2?.heading}</h3>
+            <p>{CMSData?.section2?.content}</p>
+          </div>
         </div>
         <div className={styles["right-section"]}>
           <img src={CMSData?.img_src} alt="Midson Logo" />
         </div>
       </div>
+      <div className={styles["middle-section"]}>
+        <form onSubmit={handleSubmit}>
+          <h3>Register!</h3>
+          <label className={styles["label"]}>Name: </label>
+          <input
+            value={currentUser.name}
+            type="text"
+            name="name"
+            onChange={handleChange}
+          />
+          <label className={styles["label"]}>Email:</label>
+          <input
+            value={currentUser.email}
+            type="email"
+            name="email"
+            onChange={handleChange}
+          />
+          <label className={styles["label"]}>Age:</label>
+          <input
+            value={currentUser.age}
+            type="text"
+            name="age"
+            onChange={handleChange}
+          />
+          <label className={styles["label"]}>Gender:</label>
+          <select
+            name="gender"
+            value={currentUser.gender}
+            onChange={handleChange}
+          >
+            <option>Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+          <label className={styles["label"]}>Address:</label>
+          <input
+            value={currentUser.address}
+            type="text"
+            name="address"
+            onChange={handleChange}
+          />
+          <label className={styles["label"]}>Phone Number:</label>
+          <input
+            value={currentUser.phone}
+            type="tel"
+            name="phone"
+            onChange={handleChange}
+          />
+          <button className={styles["button"]} type="submit">
+            Submit
+          </button>
+        </form>
+      </div>
       <div className={styles["bottom-section"]}>
-        <div className={styles.box}>
-          <h3>{CMSData?.section1?.heading}</h3>
-          <p>{CMSData?.section1?.content}</p>
-        </div>
-        <div className={styles.box}>
-          <h3>{CMSData?.section2?.heading}</h3>
-          <p>{CMSData?.section2?.content}</p>
-        </div>
         <div className={styles.box}>
           <h3>{CMSData?.section3?.heading}</h3>
           <p>{CMSData?.section3?.content}</p>
@@ -348,12 +357,17 @@ const LandingPage = () => {
         <div>
           <h1> Midson</h1>
         </div>
-        <div className={styles["info"]}>
+        {/* <div className={styles["info"]}>
           <a href="#">Privacy Policy</a>
           <a href="#">Terms and Conditions</a>
           <a href="#">License</a>
           <a href="#">Copyright</a>
-        </div>
+        </div> */}
+        <img
+          className={styles["bottomimg"]}
+          src="/midsonbottomwobg.png"
+          alt="Midson"
+        />
       </footer>
     </div>
   );

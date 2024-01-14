@@ -8,21 +8,40 @@
   font-family: "Handlee";
   height: 10rem;
   border-radius: 0 0 0.5rem 0.5rem;
-  background-color: #36454f;
+  background-color: #f99820;
   color: white;
   width: 100%;
-  margin: 0 0 2rem 0;
+  margin: 0;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+}
+
+.logo {
+  height: 5rem;
+  object-fit: contain;
+  width: 20%;
+  margin-left: 0;
+}
+
+.topimg {
+  width: 50%;
+  object-fit: contain;
+}
+
+.bottomimg {
+  width: 70%;
+  margin: auto;
+  height: 10rem;
+  object-fit: contain;
 }
 
 .footer {
   font-family: "Handlee";
   height: 20rem;
   border-radius: 0.5rem 0.5rem 0 0;
-  background-color: #36454f;
+  background-color: #f99820;
   color: white;
   width: 100%;
   margin: 2rem 0 0 0;
@@ -30,43 +49,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-.info {
-  width: 50%;
-  height: fit-content;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-
-.left-section,
-.right-section,
-.top-section,
-.bottom-section {
-  width: 100%;
-  margin: 0 auto;
-}
-
-.top-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.left-section,
-.right-section {
-  width: 100%;
-}
-
-form > h3 {
-  text-align: center;
-  margin: auto;
-}
-
-.right-section {
-  margin: auto auto auto 0;
 }
 
 form {
@@ -97,6 +79,66 @@ select {
   border: 1px solid gray;
 }
 
+.top-section {
+  display: flex;
+  align-items: center;
+  width: 80%;
+  margin: 2rem auto;
+}
+
+.left-section {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+
+.left-section > form {
+  width: 90%;
+}
+
+.right-section {
+  width: 100%;
+  border: 5px;
+  border-color: #007bff;
+  margin: auto auto auto 0;
+}
+
+form > h3 {
+  text-align: center;
+  margin: auto;
+}
+
+.middle-section {
+  margin: 2rem auto auto auto;
+  width: 70%;
+}
+
+.bottom-section {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  width: 70%;
+  margin: auto;
+}
+
+img {
+  width: 100%;
+  border-radius: 0.5rem;
+  display: block;
+  margin: auto;
+}
+
+.box {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: solid 1px #36454f;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  width: 80%;
+}
+
 .button {
   background-color: white;
   border: solid 1px orangered;
@@ -114,56 +156,43 @@ select {
   border: solid 1px white;
 }
 
-.right-section {
-  width: 100%;
-  border: 5px;
-  border-color: #007bff;
-}
-
-img {
-  width: 100%;
-  border-radius: 0.5rem;
-}
-
-.bottom-section {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-  margin-top: 2rem;
-  width: 90%;
-}
-
-.box {
-  padding: 1rem;
-  border-radius: 0.5rem;
-  border: solid 1px #36454f;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-}
-
-h2 {
-  margin-bottom: 10px;
-}
-
 @media (max-width: 768px) {
+  .top-section {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
   .info {
     flex-direction: column;
     gap: 0.5rem;
   }
 
-  form {
-    width: 75%;
-    margin: auto;
-  }
-
   img {
-    width: 80%;
+    width: 90%;
     display: block;
     margin: 0 auto;
   }
 
   .right-section {
-    margin: 3rem auto 1rem auto;
+    margin: 1rem auto 1rem auto;
   }
+}
+
+/* 
+
+.info {
+  width: 50%;
+  height: fit-content;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+
+
+h2 {
+  margin-bottom: 10px;
 }
 
 @media (min-width: 768px) {
@@ -179,4 +208,4 @@ h2 {
   .bottom-section {
     grid-template-columns: repeat(2, 1fr);
   }
-}
+} */
