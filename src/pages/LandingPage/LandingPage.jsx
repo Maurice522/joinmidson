@@ -162,7 +162,6 @@ const LandingPage = () => {
       return currentUserID;
     } catch (error) {
       toast.error("couldn't create user!");
-      console.log(error);
       return null;
     }
   };
@@ -230,7 +229,6 @@ const LandingPage = () => {
           createdAt: serverTimestamp(),
           referBy: referBy,
         };
-        console.log(newUser);
 
         createUser(createdUserID, newUser);
 
@@ -319,7 +317,6 @@ const LandingPage = () => {
             domain: "",
           },
         };
-        console.log(newUser);
 
         createUser(createdUserID, newUser);
 
