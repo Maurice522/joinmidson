@@ -16,7 +16,6 @@ const LandingPage = () => {
   const [whatsAppNumber, setWhatsAppNumber] = useState("");
   const [formFields, setFormFields] = useState([
     { label: "Name", type: "text", name: "name" },
-    { label: "Email", type: "email", name: "email" },
     { label: "Phone Number", type: "tel", name: "phone" },
   ]);
 
@@ -112,16 +111,6 @@ const LandingPage = () => {
 
   const whatsAppDomain = "https://api.whatsapp.com/send?phone=";
 
-  // const [currentUser, setCurrentUser] = useState({
-  //   id: "",
-  //   name: "",
-  //   email: "",
-  //   address: "",
-  //   phone: "",
-  //   gender: "",
-  //   age: "",
-  //   referBy: { id: "", company: "", name: "", domain: "" },
-  // });
   const [currentUser, setCurrentUser] = useState({});
   const [CMSData, setCMSData] = useState({});
   const { userId, companyName } = useParams();
@@ -201,8 +190,8 @@ const LandingPage = () => {
         setReferByUser({ id: docSnap.id, ...tempData });
         const referBy = {
           id: userId,
-          company: companyName !== undefined ? companyName : "",
           name: tempReferByUser.name,
+          company: companyName !== undefined ? companyName : "",
           domain,
         };
         setCurrentUser((prevData) => ({
@@ -211,18 +200,6 @@ const LandingPage = () => {
         }));
 
         const createdUserID = makeid();
-
-        // const newUser = {
-        //   name: currentUser.name,
-        //   email: currentUser.email,
-        //   phoneNumber: currentUser.phone,
-        //   age: currentUser.age,
-        //   gender: currentUser.gender,
-        //   address: currentUser.address,
-        //   createdBy: { email: "landingpage" },
-        //   createdAt: serverTimestamp(),
-        //   referBy: referBy,
-        // };
         const newUser = {
           ...currentUser,
           createdBy: { email: "landingpage" },
@@ -263,14 +240,6 @@ const LandingPage = () => {
           if (updatedUser) {
             toast.success("User created successfully!");
             if (companyName === undefined) {
-              // const text = `*Name:* ${currentUser.name}
-              //  *Email:* ${currentUser.email}
-              //  *Phone Number:* ${currentUser.phone}
-              //  *Age:* ${currentUser.age}
-              //  *Gender:* ${currentUser.gender}
-              //  *Address:* ${currentUser.address}
-              //  *Referred By:* ${referBy.name}
-              // `;
               const text = createMessage(newUser);
 
               const wlink =
@@ -281,16 +250,6 @@ const LandingPage = () => {
 
               window.location.replace(wlink);
             } else {
-              // const text = `*Name:* ${currentUser.name}
-              //  *Email:* ${currentUser.email}
-              //  *Phone Number:* ${currentUser.phone}
-              //  *Age:* ${currentUser.age}
-              //  *Gender:* ${currentUser.gender}
-              //  *Address:* ${currentUser.address}
-              //  *Referred By:* ${referBy.name}
-              //  *Referred By (Company Name):* ${referBy.company}
-              // `;
-
               const text = createMessage(newUser);
 
               const wlink =
@@ -319,14 +278,6 @@ const LandingPage = () => {
         };
 
         createUser(createdUserID, newUser);
-
-        // const text = `*Name:* ${currentUser.name}
-        //  *Email:* ${currentUser.email}
-        //  *Phone Number:* ${currentUser.phone}
-        //  *Age:* ${currentUser.age}
-        //  *Gender:* ${currentUser.gender}
-        //  *Address:* ${currentUser.address}
-        // `;
         const text = createMessage(newUser);
 
         const wlink =
@@ -372,58 +323,6 @@ const LandingPage = () => {
         </div>
       </div>
       <div className={styles["middle-section"]}>
-        {/* <form onSubmit={handleSubmit}>
-          <h3>Register!</h3>
-          <label className={styles["label"]}>Name: </label>
-          <input
-            value={currentUser.name}
-            type="text"
-            name="name"
-            onChange={handleChange}
-          />
-          <label className={styles["label"]}>Email:</label>
-          <input
-            value={currentUser.email}
-            type="email"
-            name="email"
-            onChange={handleChange}
-          />
-          <label className={styles["label"]}>Age:</label>
-          <input
-            value={currentUser.age}
-            type="text"
-            name="age"
-            onChange={handleChange}
-          />
-          <label className={styles["label"]}>Gender:</label>
-          <select
-            name="gender"
-            value={currentUser.gender}
-            onChange={handleChange}
-          >
-            <option>Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </select>
-          <label className={styles["label"]}>Address:</label>
-          <input
-            value={currentUser.address}
-            type="text"
-            name="address"
-            onChange={handleChange}
-          />
-          <label className={styles["label"]}>Phone Number:</label>
-          <input
-            value={currentUser.phone}
-            type="tel"
-            name="phone"
-            onChange={handleChange}
-          />
-          <button className={styles["button"]} type="submit">
-            Submit
-          </button>
-        </form> */}
         <form onSubmit={handleSubmit}>
           <h3>Register!</h3>
           {formFields.map((field) => (
