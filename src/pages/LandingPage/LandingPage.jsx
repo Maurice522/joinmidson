@@ -14,6 +14,62 @@ import toast from "react-hot-toast";
 const LandingPage = () => {
   const domain = `https://joinmidson-ochre.vercel.app`;
   const [whatsAppNumber, setWhatsAppNumber] = useState("");
+  const [formFields, setFormFields] = useState([
+    { label: "Name", type: "text", name: "name" },
+    { label: "Email", type: "email", name: "email" },
+    { label: "Phone Number", type: "tel", name: "phone" },
+  ]);
+
+  function createMessage(obj, indentation = 0) {
+    let message = "";
+
+    const generateIndentation = (count) => " ".repeat(count);
+
+    const hasNonEmptyKey = Object.keys(obj).some((key) => {
+      return obj[key] !== null && obj[key] !== "" && obj[key] !== undefined;
+    });
+
+    if (!hasNonEmptyKey) {
+      return message;
+    }
+
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (key === "createdAt") {
+          continue;
+        }
+
+        if (obj[key] !== null && obj[key] !== "" && obj[key] !== undefined) {
+          if (typeof obj[key] === "object") {
+            const nestedKeys = Object.keys(obj[key]);
+            const isEmpty = nestedKeys.every(
+              (nestedKey) =>
+                obj[key][nestedKey] === null ||
+                obj[key][nestedKey] === "" ||
+                obj[key][nestedKey] === undefined
+            );
+
+            if (isEmpty) {
+              continue;
+            }
+          }
+          message += `${generateIndentation(indentation)}*${key}*: `;
+
+          if (typeof obj[key] === "object" && obj[key] !== null) {
+            const nestedMessage = createMessage(obj[key], indentation + 2);
+
+            if (nestedMessage.trim() !== "") {
+              message += `\n${nestedMessage}`;
+            }
+          } else {
+            message += `${obj[key]}\n`;
+          }
+        }
+      }
+    }
+
+    return message;
+  }
 
   useEffect(() => {
     const fetchMetaData = async () => {
@@ -28,6 +84,23 @@ const LandingPage = () => {
             metaData.whatsAppNumber.length
           );
           setWhatsAppNumber(number);
+
+          const additionalFields = metaData.fields || [];
+
+          const dynamicFormFields = additionalFields.map((field) => ({
+            label:
+              field.fieldName.charAt(0).toUpperCase() +
+              field.fieldName.slice(1),
+            type: field.fieldType,
+            name: field.fieldName,
+            inputType: field.inputType,
+            options: field?.options || null,
+          }));
+
+          setFormFields((prevFormFields) => [
+            ...prevFormFields,
+            ...dynamicFormFields,
+          ]);
         }
       } catch (error) {
         console.error("Error fetching meta data:", error);
@@ -39,16 +112,17 @@ const LandingPage = () => {
 
   const whatsAppDomain = "https://api.whatsapp.com/send?phone=";
 
-  const [currentUser, setCurrentUser] = useState({
-    id: "",
-    name: "",
-    email: "",
-    address: "",
-    phone: "",
-    gender: "",
-    age: "",
-    referBy: { id: "", company: "", name: "", domain: "" },
-  });
+  // const [currentUser, setCurrentUser] = useState({
+  //   id: "",
+  //   name: "",
+  //   email: "",
+  //   address: "",
+  //   phone: "",
+  //   gender: "",
+  //   age: "",
+  //   referBy: { id: "", company: "", name: "", domain: "" },
+  // });
+  const [currentUser, setCurrentUser] = useState({});
   const [CMSData, setCMSData] = useState({});
   const { userId, companyName } = useParams();
   const [referByUser, setReferByUser] = useState(null);
@@ -88,6 +162,7 @@ const LandingPage = () => {
       return currentUserID;
     } catch (error) {
       toast.error("couldn't create user!");
+      console.log(error);
       return null;
     }
   };
@@ -115,10 +190,7 @@ const LandingPage = () => {
     if (
       currentUser.name !== "" &&
       currentUser.email !== "" &&
-      currentUser.phone !== "" &&
-      currentUser.address !== "" &&
-      currentUser.gender !== "Gender" &&
-      currentUser.age !== ""
+      currentUser.phone !== ""
     ) {
       if (userId && userId !== "") {
         const docRef = doc(db, "users", userId);
@@ -141,17 +213,24 @@ const LandingPage = () => {
 
         const createdUserID = makeid();
 
+        // const newUser = {
+        //   name: currentUser.name,
+        //   email: currentUser.email,
+        //   phoneNumber: currentUser.phone,
+        //   age: currentUser.age,
+        //   gender: currentUser.gender,
+        //   address: currentUser.address,
+        //   createdBy: { email: "landingpage" },
+        //   createdAt: serverTimestamp(),
+        //   referBy: referBy,
+        // };
         const newUser = {
-          name: currentUser.name,
-          email: currentUser.email,
-          phoneNumber: currentUser.phone,
-          age: currentUser.age,
-          gender: currentUser.gender,
-          address: currentUser.address,
+          ...currentUser,
           createdBy: { email: "landingpage" },
           createdAt: serverTimestamp(),
           referBy: referBy,
         };
+        console.log(newUser);
 
         createUser(createdUserID, newUser);
 
@@ -186,14 +265,15 @@ const LandingPage = () => {
           if (updatedUser) {
             toast.success("User created successfully!");
             if (companyName === undefined) {
-              const text = `*Name:* ${currentUser.name}
-               *Email:* ${currentUser.email}
-               *Phone Number:* ${currentUser.phone}
-               *Age:* ${currentUser.age}
-               *Gender:* ${currentUser.gender}
-               *Address:* ${currentUser.address}
-               *Referred By:* ${referBy.name}
-              `;
+              // const text = `*Name:* ${currentUser.name}
+              //  *Email:* ${currentUser.email}
+              //  *Phone Number:* ${currentUser.phone}
+              //  *Age:* ${currentUser.age}
+              //  *Gender:* ${currentUser.gender}
+              //  *Address:* ${currentUser.address}
+              //  *Referred By:* ${referBy.name}
+              // `;
+              const text = createMessage(newUser);
 
               const wlink =
                 whatsAppDomain +
@@ -203,15 +283,18 @@ const LandingPage = () => {
 
               window.location.replace(wlink);
             } else {
-              const text = `*Name:* ${currentUser.name}
-               *Email:* ${currentUser.email}
-               *Phone Number:* ${currentUser.phone}
-               *Age:* ${currentUser.age}
-               *Gender:* ${currentUser.gender}
-               *Address:* ${currentUser.address}
-               *Referred By:* ${referBy.name}
-               *Referred By (Company Name):* ${referBy.company}
-              `;
+              // const text = `*Name:* ${currentUser.name}
+              //  *Email:* ${currentUser.email}
+              //  *Phone Number:* ${currentUser.phone}
+              //  *Age:* ${currentUser.age}
+              //  *Gender:* ${currentUser.gender}
+              //  *Address:* ${currentUser.address}
+              //  *Referred By:* ${referBy.name}
+              //  *Referred By (Company Name):* ${referBy.company}
+              // `;
+
+              const text = createMessage(newUser);
+
               const wlink =
                 whatsAppDomain +
                 encodeURIComponent(whatsAppNumber) +
@@ -226,26 +309,28 @@ const LandingPage = () => {
       } else {
         const createdUserID = makeid();
         const newUser = {
-          name: currentUser.name,
-          email: currentUser.email,
-          phoneNumber: currentUser.phone,
-          age: currentUser.age,
-          gender: currentUser.gender,
-          address: currentUser.address,
+          ...currentUser,
           createdBy: { email: "landingpage" },
           createdAt: serverTimestamp(),
-          referBy: currentUser.referBy,
+          referBy: currentUser?.referBy || {
+            id: "",
+            company: "",
+            name: "",
+            domain: "",
+          },
         };
+        console.log(newUser);
 
         createUser(createdUserID, newUser);
 
-        const text = `*Name:* ${currentUser.name}
-         *Email:* ${currentUser.email}
-         *Phone Number:* ${currentUser.phone}
-         *Age:* ${currentUser.age}
-         *Gender:* ${currentUser.gender}
-         *Address:* ${currentUser.address}
-        `;
+        // const text = `*Name:* ${currentUser.name}
+        //  *Email:* ${currentUser.email}
+        //  *Phone Number:* ${currentUser.phone}
+        //  *Age:* ${currentUser.age}
+        //  *Gender:* ${currentUser.gender}
+        //  *Address:* ${currentUser.address}
+        // `;
+        const text = createMessage(newUser);
 
         const wlink =
           whatsAppDomain +
@@ -290,7 +375,7 @@ const LandingPage = () => {
         </div>
       </div>
       <div className={styles["middle-section"]}>
-        <form onSubmit={handleSubmit}>
+        {/* <form onSubmit={handleSubmit}>
           <h3>Register!</h3>
           <label className={styles["label"]}>Name: </label>
           <input
@@ -341,6 +426,39 @@ const LandingPage = () => {
           <button className={styles["button"]} type="submit">
             Submit
           </button>
+        </form> */}
+        <form onSubmit={handleSubmit}>
+          <h3>Register!</h3>
+          {formFields.map((field) => (
+            <div className={styles["fieldDiv"]} key={field.name}>
+              <label className={styles["label"]}>{field.label}:</label>
+              {field.inputType === "dropdown" ? (
+                <select
+                  name={field.name}
+                  value={currentUser[field.name] || ""}
+                  onChange={handleChange}
+                >
+                  <option value="">Select...</option>
+                  {field.options &&
+                    field.options.map((option, index) => (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                </select>
+              ) : (
+                <input
+                  value={currentUser[field.name] || ""}
+                  type={field.type}
+                  name={field.name}
+                  onChange={handleChange}
+                />
+              )}
+            </div>
+          ))}
+          <button className={styles["button"]} type="submit">
+            Submit
+          </button>
         </form>
       </div>
       <div className={styles["bottom-section"]}>
@@ -357,12 +475,6 @@ const LandingPage = () => {
         <div>
           <h1> Midson</h1>
         </div>
-        {/* <div className={styles["info"]}>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms and Conditions</a>
-          <a href="#">License</a>
-          <a href="#">Copyright</a>
-        </div> */}
         <img
           className={styles["bottomimg"]}
           src="/midsonbottomwobg.png"
