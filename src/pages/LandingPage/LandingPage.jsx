@@ -1,13 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./LandingPage.module.css";
 import { db } from "../../firebase";
-import {
-  doc,
-  getDoc,
-  serverTimestamp,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -16,7 +10,7 @@ const LandingPage = () => {
   const [whatsAppNumber, setWhatsAppNumber] = useState("");
   const [formFields, setFormFields] = useState([
     { label: "Name", type: "text", name: "name" },
-    { label: "Phone Number", type: "tel", name: "phone" },
+    { label: "Phone Number", type: "tel", name: "phoneNumber" },
   ]);
 
   function createMessage(obj, indentation = 0) {
@@ -202,8 +196,9 @@ const LandingPage = () => {
         const createdUserID = makeid();
         const newUser = {
           ...currentUser,
+          custId: createdUserID,
           createdBy: { email: "landingpage" },
-          createdAt: serverTimestamp(),
+          createdAt: new Date(),
           referBy: referBy,
         };
 
@@ -267,8 +262,9 @@ const LandingPage = () => {
         const createdUserID = makeid();
         const newUser = {
           ...currentUser,
+          custId: createdUserID,
           createdBy: { email: "landingpage" },
-          createdAt: serverTimestamp(),
+          createdAt: new Date(),
           referBy: currentUser?.referBy || {
             id: "",
             company: "",
